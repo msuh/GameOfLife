@@ -9,46 +9,93 @@ var white = Color(255, 255, 255);
 //Each cell is either set as true(live) or false(dead)
 var GameOfLife = function (MaxX, MaxY){
 	// create the drawing pad object and associate with the canvas
-	pad = Pad(document.getElementById('canvas'));
-	pad.clear();
+	// pad = Pad(document.getElementById('canvas'));
+	// pad.clear();
 
 	// set constants to be able to scale to any canvas size
 	var MAX_X = MaxX;
 	var MAX_Y = MaxY;
-	var x_factor = pad.get_width() / MAX_X;
-	var y_factor = pad.get_height() / MAX_Y;
-	console.log("pad.get_width(): ",pad.get_width());
-	console.log("x_factor: ",x_factor);
+	// var x_factor = pad.get_width() / MAX_X;
+	// var y_factor = pad.get_height() / MAX_Y;
+	// console.log("pad.get_width(): ",pad.get_width());
+	// console.log("x_factor: ",x_factor);
 	
 	var initial = 0, spacing = 1;
 	var RADIUS = 5, margin = 3;
 	var LINE_WIDTH = 0;
+	interval=0; //defining interval as global so that it is accessible in jQuery functions
+	color = "green", prevColor = "black";
+	var on = true;
 
 	// draw a box
-	pad.draw_rectangle(Coord(0, 0), pad.get_width(), pad.get_height(), 1, black);
+	// pad.draw_rectangle(Coord(0, 0), pad.get_width(), pad.get_height(), 1, black);
 
-	//the 2D array that represents the grid cells
+	var position1 = [[14,1],[15,1],[14,2],[15,2],[14,11],[15,11],[16,11],[13,12],[17,12],[12,13],[18,13],[12,14],[18,14],[15,15],[13,16],[17,16],[14,17],[15,17],[16,17],[15,18],[14,21],[13,21],[12,21],[14,22],[13,22],[12,22],[11,23],[15,23],[15,25],[16,25],[11,25],[10,25],[13,35],[12,35],[13,36],[12,36]];
+	var position2 = [[4,2],[5,2],[6,2],[10,2],[11,2],[12,2],[2,4],[2,5],[2,6],[7,4],[7,5],[7,6],[9,4],[9,5],[9,6],[14,4],[14,5],[14,6],[4,7],[5,7],[6,7],[10,7],[11,7],[12,7],[4,9],[5,9],[6,9],[10,9],[11,9],[12,9],[2,10],[2,11],[2,12],[7,10],[7,11],[7,12],[9,10],[9,11],[9,12],[14,10],[14,11],[14,12],[4,14],[5,14],[6,14],[10,14],[11,14],[12,14]]
+	
+
+	// var interval = setInterval(function(){
+	// 	cells = update(MAX_X, MAX_Y);
+	// 	// console.log(cells);
+	// 	drawUpate();
+
+	// }, 500);
+
+	// var position1 = [[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]]
 	var cells = initialize(MAX_X, MAX_Y);
+	// initialize2(MAX_X, MAX_Y);
+	startInterval(interval);
+	// makeBoard(position1);
 
-	var interval = setInterval(function(){
-		cells = update(MAX_X, MAX_Y);
-		// console.log(cells);
-		drawUpate();
-
-	}, 500);
 
 	//initializes an array object with number of x and y elements. Higher level ar[i] --> x, inner level ar[i][j] --> y
 	function initialize(x, y){
+		$('#table').empty();
 		var ar = [];
 		for(var i=0; i<x; i++){
 			ar[i] = new Array(y);
+			$('#table').append("<tr></tr>");
+
 			for(var j=0; j<y; j++){
-				ar[i][j] = randomize(.4);
+				var life = randomize(.4);
+				ar[i][j] = life, id = i*y+j;
+				var td = "<td id='"+id+"'></td>";
+				if(life){
+					td = "<td class='"+color+"' id='"+id+"'></td>";
+				}
+				
+				$('#table tr:nth-child('+(i+1)+')').append(td);
 			}
 		}
+
 		return ar;
 	}
 
+	function initialize2(x, y){
+		var ar = [];
+		for(var i=0; i<x; i++){
+			ar[i] = new Array(y);
+			$('#table').append("<tr></tr>");
+
+			for(var j=0; j<y; j++){
+				var id = i*y+j;
+				ar[i][j] = false;
+				var td = "<td id='"+id+"'></td>";
+				$('#table1 tr:nth-child('+(i+1)+')').append(td);
+			}
+		}
+
+		return ar;
+	}
+
+	function makeBoard(lst){
+		for(i in lst){
+			var tup = lst[i];
+			cells[tup[0]][tup[1]] = true;
+			var id = tup[0]*MAX_Y+tup[1];
+			$('#'+id).addClass(color);
+		}
+	}
 	//randomly returns true or false based on the probability provided for life
 	function randomize(Problife){
 		var ran = Math.random();
@@ -68,6 +115,8 @@ var GameOfLife = function (MaxX, MaxY){
 					continue;
 				}
 				if(cellValid(x+i,y+j)){
+					// console.log(cellValid(x+i,y+i));
+					// console.log(x+i,y+j);
 					if(cells[x+i][y+j]){ //this neighbor cell is live
 						neighbor++;
 					}
@@ -115,6 +164,7 @@ var GameOfLife = function (MaxX, MaxY){
 		return newAr;
 	}
 
+	//phase1 drawUpdate using canvas HTML5
 	function drawUpate(){
 		pad.clear();
 		pad.draw_rectangle(Coord(0, 0), pad.get_width(), pad.get_height(), 1, black);
@@ -136,26 +186,92 @@ var GameOfLife = function (MaxX, MaxY){
 		}
 	}
 
+	function drawUpdate2(){
+		for (var i = 0; i < MAX_X; i = i + spacing) {
+			for (var j = 0; j < MAX_Y; j = j + spacing) {
+				// select circle or square according some arbitrary criterion
+				var id = i*MAX_Y+j;
+				if(cells[i][j]){
+					$("#"+id).removeClass(prevColor);
+					$("#"+id).addClass(color);
+				}else{
+					$("#"+id).removeClass(prevColor);
+					$("#"+id).removeClass(color);
+				}
+			}
+		}
+	}
+
+	function removeClass(clas){
+		for (var i = 0; i < MAX_X; i = i + spacing) {
+			for (var j = 0; j < MAX_Y; j = j + spacing) {
+				var id = i*MAX_Y+j;
+				$("#"+id).removeClass(clas);
+			}
+		}
+	}
+	function startInterval(inter){
+		console.log("starting interval");
+		interval = setInterval(function(){
+			cells = update(MAX_X, MAX_Y);
+			drawUpdate2();
+
+		}, 200);
+		on = true;
+	}
+
+	function stopInterval(inter){
+		console.log("stopping interval");
+		clearInterval(interval);
+		on = false;
+	}
+
+	$("#button_start").click(function(){
+		if(on){
+			return;
+		}
+		startInterval(interval);
+	});
+
+	$("#button_stop").click(function(){
+		if(on){
+			stopInterval(interval);	
+		}
+	});
+	$("input[name='color']").change(function(){
+		// removeClass(color);
+		prevColor = color;
+		color = $(this).val();
+	});
+
+
+
+	$("input[name='position']").change(changePos );
+
+	function changePos(){
+		console.log("enter position");
+		console.log($(this).val());
+		// removeClass(color);
+		if($(this).val() == "randomized"){
+			cells = initialize(35,50);
+		}else if($(this).val() == "gun"){
+			cells = initialize2(35,50);
+			makeBoard(position1);
+		}else if($(this).val() == "pulsar"){
+			cells = initialize2(35,50);
+			makeBoard(position2);
+
+		}
+	}
 
 }
 
+	
 
 
 
 
-var game = GameOfLife(49,30);
-
-
-
-///testing
-/*
-	1. testing initializing 
-	2. test randomize()
-	3. nextStep()
-	4. cellValid()
-
-*/
-
+var game = GameOfLife(35,50);
 
 
 

@@ -1,11 +1,47 @@
-
+body{
+	font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+	/*background-color: #F2D6BD;*/
+}
 
 #canvas_container {
 	position: absolute; 
 	left: 50%; 
 	top: 50%;
 	margin-left: -400px;
-	margin-top: -250px; 
-	width:800px;
-	height:500px;
+	margin-top: -300px; 
+	/*width:800px;*/
+	/*height:500px;*/
+}
+
+button{
+	height: 20px;
+	width: 40px;
+}
+
+#table{
+	margin-top: 20px;	
+}
+td{
+	width: 10px;
+	height:10px;
+}
+
+form{
+	margin-top: 5px;
+}
+#startStop{
+	float:right;
+}
+
+.green{
+	background-color: green;
+}
+.red{
+	background-color: red;
+}
+.blue{
+	background-color: blue;
+}
+.black{
+	background-color: black;
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="graphics.js"></script>
+    <script src='http://code.jquery.com/jquery-1.10.1.min.js'></script>
     <link href="index.css" type="text/css" rel="stylesheet">
 </head>
 
@@ -11,7 +12,27 @@
 define the HTML canvas element that will hold the graphical output
 -->
 <div id="canvas_container">
-    <canvas id="canvas"></canvas>
+	<form id="startStop">
+		<button id="button_start" type="button">Start</button>
+		<button id="button_stop" type="button">Stop</button>
+	</form>
+    <!-- <canvas id="canvas"></canvas> -->
+
+    <form>
+		<input type="radio" name="color" value="green" checked>green
+		<input type="radio" name="color" value="blue">blue
+		<input type="radio" name="color" value="black">black
+		<input type="radio" name="color" value="red">red
+	</form>
+
+	<form>
+		<input type="radio" name="position" value="randomized" checked>randomized
+		<input type="radio" name="position" value="gun">gun
+		<input type="radio" name="position" value="pulsar">pulsar
+	</form>
+
+    <table id="table">
+    </table>
 </div>
 
 <!--
