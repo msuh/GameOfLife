@@ -90,10 +90,35 @@ test("testing update function", function(){
 
 });
 
+test("testing the correct size of 2D array with initialize2()", function(){
+	var ar = initialize2(3,3);
+	equal(ar.length, 3, "checking the size of 2D array after initializing of equal size");
+	equal(ar[0].length, 3, "checking the size of 2D array after initializing of equal size");
+
+	var ar = initialize2(9,10);
+	equal(ar.length, 9, "checking the size of 2D array after initializing of smaller width");
+	equal(ar[0].length, 10, "checking the size of 2D array after initializing of smaller width");
+
+	var ar = initialize2(20,15);
+	equal(ar.length, 20, "checking the size of 2D array after initializing of smaller height");
+	equal(ar[0].length, 15, "checking the size of 2D array after initializing of smaller height");
+
+});
 
 
+test("makeboard was tested by the actual display of live and dead cells on screen manually", function(){
+	var position1 = [[14,1],[15,1],[14,2],[15,2],[14,11],[15,11],[16,11],[13,12],[17,12],[12,13],[18,13],[12,14],[18,14],[15,15],[13,16],[17,16],[14,17],[15,17],[16,17],[15,18],[14,21],[13,21],[12,21],[14,22],[13,22],[12,22],[11,23],[15,23],[15,25],[16,25],[11,25],[10,25],[13,35],[12,35],[13,36],[12,36]];
+	// makeBoard(position1);
+	equal(true, true, ".");
+});
 
+test("tested the start and stop function for game of Life on screen manually ", function(){
+	equal(true, true, ".");
+});
 
+test("tested changing colors for all cells on screen manually", function(){
+	equal(true, true, ".");
+});
 
 
 
